@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Ticket #{{ ticket.id }}{% endblock %}
+{% block content %}
+<h2>Ticket #{{ ticket.id }}: {{ ticket.title }}</h2>
+<p><strong>User:</strong> {{ ticket.user_name }} ({{ ticket.user_email }})</p>
+<p><strong>Category:</strong> {{ ticket.category }} | <strong>Priority:</strong> {{ ticket.priority }}</p>
+<p><strong>Status:</strong> <span class="status-{{ ticket.status|lower|replace(' ', '') }}">{{ ticket.status }}</span></p>
+<p><strong>Created:</strong> {{ ticket.created_at }}</p>
+<h3>Description</h3>
+<p>{{ ticket.description }}</p>
+{% if ticket.resolution %}
+<h3>Resolution Notes</h3>
+<p>{{ ticket.resolution }}</p>
+{% endif %}
+
+{% if session.get('admin') %}
+<form method="POST">
+    <label>Update Status</label>
+    <select name="status">
+        <option value="Open" {% if ticket.status == 'Open' %}selected{% endif %}>Open</option>
+        <option value="In Progress" {% if ticket.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+        <option value="Resolved" {% if ticket.status == 'Resolved' %}selected{% endif %}>Resolved</option>
+    </select>
+    <label>Resolution Notes</label>
+    <textarea name="resolution" rows="4">{{ ticket.resolution or '' }}</textarea>
+    <button type="submit">Update Ticket</button>
+</form>
+<button type="button" onclick="document.getElementById('suggestion').style.display='block'">Suggest Fix</button>
+<div id="suggestion" class="suggestion" style="display:none;">
+    <strong>Suggested steps based on category:</strong><br>
+    {% if ticket.category == 'Account' %}
+    1. Verify user identity.<br>
+    2. Check account lockout status.<br>
+    3. Reset password and unlock if needed.<br>
+    4. Confirm user can log in.
+    {% elif ticket.category == 'Email' %}
+    1. Check Outlook/webmail status.<br>
+    2. Verify mailbox and connectivity.<br>
+    3. Clear cache or reconfigure profile if needed.<br>
+    4. Test send/receive.
+    {% elif ticket.category == 'Network' %}
+    1. Check Wi-Fi/VPN connection.<br>
+    2. Run ipconfig / flushdns.<br>
+    3. Restart network adapter.<br>
+    4. Test connectivity to gateway and internet.
+    {% elif ticket.category == 'Hardware' %}
+    1. Check physical connections and power.<br>
+    2. Restart device.<br>
+    3. Test with another port/cable if possible.<br>
+    4. Escalate if hardware fault confirmed.
+    {% elif ticket.category == 'Software' %}
+    1. Check if application is installed and updated.<br>
+    2. Restart the application or computer.<br>
+    3. Clear temporary files if relevant.<br>
+    4. Reinstall if necessary.
+    {% else %}
+    Review description, gather more details from user, and apply standard troubleshooting steps.
+    {% endif %}
+</div>
+{% endif %}
+<p><a href="{{ url_for('admin_dashboard') if session.get('admin') else url_for('dashboard') }}">Back to Dashboard</a></p>
+{% endblock %}

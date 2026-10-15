@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<h2>All Tickets</h2>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>User</th>
+        <th>Title</th>
+        <th>Category</th>
+        <th>Priority</th>
+        <th>Status</th>
+        <th>Created</th>
+        <th>Action</th>
+    </tr>
+    {% for ticket in tickets %}
+    <tr>
+        <td>{{ ticket.id }}</td>
+        <td>{{ ticket.user_name }} ({{ ticket.user_email }})</td>
+        <td>{{ ticket.title }}</td>
+        <td>{{ ticket.category }}</td>
+        <td>{{ ticket.priority }}</td>
+        <td class="status-{{ ticket.status|lower|replace(' ', '') }}">{{ ticket.status }}</td>
+        <td>{{ ticket.created_at }}</td>
+        <td><a href="{{ url_for('ticket_detail', ticket_id=ticket.id) }}">View / Update</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

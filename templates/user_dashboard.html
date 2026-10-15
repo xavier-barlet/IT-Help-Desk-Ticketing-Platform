@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h2>My Tickets</h2>
+<a href="{{ url_for('raise_ticket') }}" class="btn">Raise New Ticket</a>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Category</th>
+        <th>Priority</th>
+        <th>Status</th>
+        <th>Created</th>
+    </tr>
+    {% for ticket in tickets %}
+    <tr>
+        <td>{{ ticket.id }}</td>
+        <td>{{ ticket.title }}</td>
+        <td>{{ ticket.category }}</td>
+        <td>{{ ticket.priority }}</td>
+        <td class="status-{{ ticket.status|lower|replace(' ', '') }}">{{ ticket.status }}</td>
+        <td>{{ ticket.created_at }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% if not tickets %}
+<p>No tickets yet. Raise one to get started.</p>
+{% endif %}
+{% endblock %}

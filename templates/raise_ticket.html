@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Raise Ticket{% endblock %}
+{% block content %}
+<h2>Raise a New Ticket</h2>
+<form method="POST">
+    <label>Title</label>
+    <input type="text" name="title" required>
+    <label>Description</label>
+    <textarea name="description" rows="5" required></textarea>
+    <label>Category</label>
+    <select name="category" required>
+        <option value="Account">Account</option>
+        <option value="Email">Email</option>
+        <option value="Network">Network</option>
+        <option value="Hardware">Hardware</option>
+        <option value="Software">Software</option>
+        <option value="Other">Other</option>
+    </select>
+    <label>Priority</label>
+    <select name="priority" required>
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+    </select>
+    <button type="submit">Submit Ticket</button>
+</form>
+{% endblock %}
